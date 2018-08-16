@@ -5,3 +5,4 @@ authors = ["Ben Bariteau <\"ben.bariteau@gmail.com\">"]
 
 [dependencies]
 reqwest = "^0.8.7"
+itertools = "^0.6.5"

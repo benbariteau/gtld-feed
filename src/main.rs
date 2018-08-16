@@ -1,8 +1,10 @@
 extern crate reqwest;
+extern crate itertools;
 
 use std::collections::HashSet;
 use std::fs::File;
 use std::io::Read;
+use itertools::sorted;
 
 fn main() {
     // TODO: take in path to old tlds
@@ -16,7 +18,7 @@ fn main() {
     // split on newline and then skip the first line, which is always the generated time comment
     let new_tlds: HashSet<&str> = new_tlds_text.split("\n").skip(1).map(|tld| tld.trim()).collect();
 
-    for tld in new_tlds.difference(&old_tlds) {
+    for tld in sorted(new_tlds.difference(&old_tlds)) {
         println!("{}", tld);
     }
 }
