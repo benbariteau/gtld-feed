@@ -5,7 +5,7 @@ extern crate chrono;
 
 use std::collections::HashSet;
 use std::fs::File;
-use std::io::Read;
+use std::io::{Read, Write};
 use itertools::{sorted, join};
 
 fn main() {
@@ -46,6 +46,9 @@ fn main() {
     let mut new_json_feed = old_json_feed.clone();
     new_json_feed.items = items;
 
-    let new_json_feed_file = File::create("feed_new.json").unwrap();
+    let new_json_feed_file = File::create("feed.json").unwrap();
     jsonfeed::to_writer(new_json_feed_file, &new_json_feed).unwrap();
+
+    let mut new_tlds_file = File::create("old_tlds.txt").unwrap();
+    new_tlds_file.write(&join(sorted(&new_tlds), "\n").into_bytes()).unwrap();
 }
