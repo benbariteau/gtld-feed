@@ -1,6 +1,7 @@
 extern crate reqwest;
 extern crate itertools;
 extern crate jsonfeed;
+extern crate chrono;
 
 use std::collections::HashSet;
 use std::fs::File;
