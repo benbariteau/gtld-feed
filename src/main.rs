@@ -15,10 +15,6 @@ fn main() {
     let old_tlds_text = String::from_utf8(old_tlds_bytes).unwrap();
     let old_tlds: HashSet<&str> = old_tlds_text.split("\n").map(|tld| tld.trim()).collect();
 
-    // TODO: take in path to json feed file
-    let old_json_feed_file = File::open("feed.json").unwrap();
-    let old_json_feed = jsonfeed::from_reader(old_json_feed_file).unwrap();
-
     let new_tlds_text = reqwest::get("https://data.iana.org/TLD/tlds-alpha-by-domain.txt").unwrap().text().unwrap();
     // split on newline and then skip the first line, which is always the generated time comment
     let new_tlds: HashSet<&str> = new_tlds_text.split("\n").skip(1).map(|tld| tld.trim()).collect();
@@ -29,12 +25,17 @@ fn main() {
         return;
     }
 
+    // TODO: take in path to json feed file
+    let old_json_feed_file = File::open("feed.json").unwrap();
+    let old_json_feed = jsonfeed::from_reader(old_json_feed_file).unwrap();
+
     let mut items = old_json_feed.items.clone();
     // remove the last item
     items.truncate(19);
 
     let mut item_builder = jsonfeed::Item::builder();
-    item_builder.id = Some("0".to_string());
+    let last_id: usize = items[0].id.parse().unwrap();
+    item_builder.id = Some(format!("{}", last_id + 1));
     let item = item_builder
         .content_text(join(newest_tlds, "\n"))
         .build().unwrap();
