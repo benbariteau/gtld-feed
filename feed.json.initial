@@ -1,0 +1,11 @@
+{
+  "version": "https://jsonfeed.org/version/1",
+  "title": "New IANA gTLDs",
+  "items": [
+    {
+      "id": "0",
+      "content_html": "Check <a href=\"https://data.iana.org/TLD/tlds-alpha-by-domain.txt\">https://data.iana.org/TLD/tlds-alpha-by-domain.txt</a> for current list"
+    }
+  ],
+  "description": "This feed updates whenever there are new gTLDs published to the IANA master list"
+}
