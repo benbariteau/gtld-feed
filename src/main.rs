@@ -7,6 +7,7 @@ use std::collections::HashSet;
 use std::fs::File;
 use std::io::{Read, Write};
 use itertools::{sorted, join};
+use chrono::Utc;
 
 fn main() {
     // TODO: take in path to old tlds
@@ -37,6 +38,7 @@ fn main() {
     let mut item_builder = jsonfeed::Item::builder();
     let last_id: usize = items[0].id.parse().unwrap();
     item_builder.id = Some(format!("{}", last_id + 1));
+    item_builder.date_published = Some(Utc::now().to_rfc3339());
     let item = item_builder
         .content_text(join(newest_tlds, "\n"))
         .build().unwrap();
