@@ -21,7 +21,7 @@ fn main() {
     // split on newline and then skip the first line, which is always the generated time comment
     let new_tlds: HashSet<&str> = new_tlds_text.split("\n").skip(1).map(|tld| tld.trim()).collect();
 
-    let newest_tlds = sorted(new_tlds.difference(&old_tlds));
+    let newest_tlds: Vec<&str> = sorted(new_tlds.difference(&old_tlds)).map(|v| *v).collect();
 
     if newest_tlds.is_empty() {
         return;
@@ -40,7 +40,12 @@ fn main() {
     item_builder.id = Some(format!("{}", last_id + 1));
     item_builder.date_published = Some(Utc::now().to_rfc3339());
     let item = item_builder
-        .content_text(join(newest_tlds, "\n"))
+        .title(format!("New TLDs {}", Utc::today().format("%F")))
+        .content_text(
+            format!("<ul>{}</ul>",
+                    join(newest_tlds.iter().map(|tld| format!("<li>{}</li>", tld)), "\n")
+                    )
+            )
         .build().unwrap();
 
     items.insert(0, item);
