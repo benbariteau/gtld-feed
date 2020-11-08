@@ -2,16 +2,25 @@ extern crate reqwest;
 extern crate itertools;
 extern crate jsonfeed;
 extern crate chrono;
+extern crate structopt;
 
 use std::collections::HashSet;
 use std::fs::File;
 use std::io::{Read, Write};
 use itertools::{sorted, join};
 use chrono::Utc;
+use structopt::StructOpt;
+
+#[derive(StructOpt)]
+struct Opts {
+    old_tlds: String,
+    feed: String,
+}
 
 fn main() {
-    // TODO: take in path to old tlds
-    let mut old_tlds_file = File::open("old_tlds.txt").unwrap();
+    let opts = Opts::from_args();
+    println!("loading old tlds from: {}", &opts.old_tlds);
+    let mut old_tlds_file = File::open(&opts.old_tlds).unwrap();
     let mut old_tlds_bytes = vec![];
     old_tlds_file.read_to_end(&mut old_tlds_bytes).unwrap();
     let old_tlds_text = String::from_utf8(old_tlds_bytes).unwrap();
@@ -27,8 +36,7 @@ fn main() {
         return;
     }
 
-    // TODO: take in path to json feed file
-    let old_json_feed_file = File::open("feed.json").unwrap();
+    let old_json_feed_file = File::open(&opts.feed).unwrap();
     let old_json_feed = jsonfeed::from_reader(old_json_feed_file).unwrap();
 
     let mut items = old_json_feed.items.clone();
@@ -53,9 +61,9 @@ fn main() {
     let mut new_json_feed = old_json_feed.clone();
     new_json_feed.items = items;
 
-    let new_json_feed_file = File::create("feed.json").unwrap();
+    let new_json_feed_file = File::create(opts.feed).unwrap();
     jsonfeed::to_writer(new_json_feed_file, &new_json_feed).unwrap();
 
-    let mut new_tlds_file = File::create("old_tlds.txt").unwrap();
+    let mut new_tlds_file = File::create(opts.old_tlds).unwrap();
     new_tlds_file.write(&join(sorted(&new_tlds), "\n").into_bytes()).unwrap();
 }
