@@ -1,14 +1,15 @@
-extern crate reqwest;
+extern crate chrono;
 extern crate itertools;
 extern crate jsonfeed;
-extern crate chrono;
+extern crate reqwest;
 extern crate structopt;
 
 use std::collections::HashSet;
 use std::fs::File;
 use std::io::{Read, Write};
-use itertools::{sorted, join};
+
 use chrono::Utc;
+use itertools::{join, sorted};
 use structopt::StructOpt;
 
 #[derive(StructOpt)]

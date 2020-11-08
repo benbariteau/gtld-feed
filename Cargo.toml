@@ -4,8 +4,8 @@ version = "0.1.0"
 authors = ["Ben Bariteau <\"ben.bariteau@gmail.com\">"]
 
 [dependencies]
-reqwest = "^0.9.0"
+chrono = "^0.4.0"
 itertools = "^0.9.0"
 jsonfeed = "^0.2.0"
-chrono = "^0.4.0"
+reqwest = "^0.9.0"
 structopt = "^0.3.0"
